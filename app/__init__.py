@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, render_template
 import psycopg2
-from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
+
+# from flask_bcrypt import Bcrypt
+# from flask_login import LoginManager
 
 # from flask import session
 # from flask_session import Session
@@ -16,12 +17,12 @@ app.config["SECRET_KEY"] = "fc089b9218301ad987914c53481bff04"
 db = "dbname='flask_project' user='postgres' host='127.0.0.1' password = 'password123'"
 conn = psycopg2.connect(db)
 
-bcrypt = Bcrypt(app)
+# bcrypt = Bcrypt(app)
 
 
-login_manager = LoginManager(app)
-login_manager.login_view = "login"
-login_manager.login_message_category = "info"
+# login_manager = LoginManager(app)
+# login_manager.login_view = "login"
+# login_manager.login_message_category = "info"
 
 # Check Configuration section for more details
 # SESSION_TYPE = 'filesystem'
@@ -42,4 +43,4 @@ print(mysession)
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return render_template("homepage.html")

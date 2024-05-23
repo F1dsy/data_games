@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+<section class="text-center">
+    <h1>Data Games</h1>
+    <h2>Select a category to be quizzed on</h2>
+    <div class="container-40">
+    <div class="d-flex flex-column align-items-center">
+    {% for category in [{"title": "GDP"}, {"title": "Healthcare"}] %}
+        <button class="btn btn-primary">{{ category.title }}</button>
+    {% endfor %}
+    </div>
+    </div>
+</section>
+{% endblock content %}
