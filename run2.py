@@ -3,6 +3,10 @@ import os
 import random
 import csv
 #import cv2
+try:
+    import app.GETDATA
+except:
+    import GETDATA
 
 app = Flask(__name__)
 
@@ -14,7 +18,7 @@ def index():
         d=random.choice(files)
         return render_template("index.html", flag=d)
     else:
-        data = get_data()
+        data = GETDATA.getRandomCountry()
         vej = request.form["flag"]
         for d in data:
             if d['filnavn'] == vej:
@@ -33,17 +37,6 @@ def index():
         d=random.choice(files)
         return render_template("index.html", flag=d, result=result)
 
-
-def get_data(Dataset_id:str, Country_name:str):
-    #get random row from schema.sql
-    SQL = f'SELECT Country, Value FROM Datarow WHERE Dataset_ID = {Dataset_id} AND Country != {Country_name} ORDER BY RANDOM() LIMIT 1;'
-    cursor = conn.cursor()
-    cursor.execute(SQL)
-    data = cursor.fetchall()
-    cursor.close()
-    return data
-
-    
 
 
 if __name__ == '__main__':
