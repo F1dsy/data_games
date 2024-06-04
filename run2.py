@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import os
 import random
 import csv
-import cv2
+#import cv2
 
 app = Flask(__name__)
 
@@ -34,9 +34,14 @@ def index():
         return render_template("index.html", flag=d, result=result)
 
 
-def get_data(Country_id:str, Country_name:str):
+def get_data(Dataset_id:str, Country_name:str):
     #get random row from schema.sql
-    f'SELECT {Country_name} FROM {Country_id} ORDER BY RANDOM() LIMIT 1;'
+    SQL = f'SELECT Country, Value FROM Datarow WHERE Dataset_ID = {Dataset_id} AND Country != {Country_name} ORDER BY RANDOM() LIMIT 1;'
+    cursor = conn.cursor()
+    cursor.execute(SQL)
+    data = cursor.fetchall()
+    cursor.close()
+    return data
 
     
 
