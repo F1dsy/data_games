@@ -13,12 +13,19 @@ CREATE TABLE IF NOT EXISTS Dataset(
 	Dataset_Name varchar(60) UNIQUE
 );
 
+DROP TABLE IF EXISTS Countries CASCADE;
+CREATE TABLE IF NOT EXISTS Countries(
+	Country varchar(60) PRIMARY KEY,
+	Code varchar(6) UNIQUE
+);
+
 DROP TABLE IF EXISTS Datarow CASCADE;
 CREATE TABLE IF NOT EXISTS Datarow(
 	Dataset_ID integer,
 	Country varchar(60),
 	Value Real,
 	FOREIGN KEY (Dataset_ID) REFERENCES Dataset(Dataset_ID) ON DELETE CASCADE,
+	FOREIGN KEY (Country) REFERENCES Countries(Country) ON DELETE CASCADE,
 	PRIMARY KEY (Dataset_ID, Country)
 );
 

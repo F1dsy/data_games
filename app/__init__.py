@@ -26,6 +26,19 @@ cursor.execute(open("app/schema.sql", "r").read())
 cursor.close()
 
 # Insert data into tables:
+import json
+insertCountry = "INSERT INTO Countries(Country, Code) VALUES (%s, %s)"
+
+f = open("app/data/countries/countries.json", "r")
+countriesdata = json.load(f)
+f.close()
+
+cursor = conn.cursor()
+for country in countriesdata.keys():
+    cursor.execute(insertCountry, (countriesdata[country], country))
+cursor.close()
+
+
 Games = []
 filenames = listdir("app/data/games")
 for name in filenames:
@@ -34,13 +47,16 @@ for name in filenames:
 
 insertDATASET = "INSERT INTO Dataset(Dataset_ID, Dataset_Name) VALUES (%s, %s)"
 insertDATAROW = "INSERT INTO Datarow(Dataset_ID, Country, Value) VALUES (%s, %s, %s)"
+selectCountry = "SELECT * FROM Countries WHERE Country = %s"
 
 cursor = conn.cursor()
 for i in range(len(Games)):
     cursor.execute(insertDATASET, (i, Games[i]))
     data = pd.read_csv("app/data/games/" + Games[i] + ".csv")
     for j in range(len(data)):
-        cursor.execute(insertDATAROW, (i, data.iloc[j, 0], data.iloc[j, 1]))
+        cursor.execute(selectCountry, (data.iloc[j, 0],))
+        if cursor.fetchone() is not None:
+            cursor.execute(insertDATAROW, (i, data.iloc[j, 0], data.iloc[j, 1]))
 cursor.close()
 
 
