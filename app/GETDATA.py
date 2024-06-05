@@ -86,7 +86,14 @@ def getCountryValueAndCode(conn, Dataset_id:int, Country_name:str):
 
 def getGames(conn):
     cursor = conn.cursor()
-    cursor.execute("SELECT Dataset_Name FROM Dataset")
+    cursor.execute("SELECT Dataset_Name FROM Dataset order by Dataset_ID")
+    data = cursor.fetchall()
+    cursor.close()
+    return data
+
+def searchGames(conn, Game):
+    cursor = conn.cursor()
+    cursor.execute("SELECT Dataset_Name FROM Dataset where regexp_count(Dataset_Name,%s) > 0 order by Dataset_ID", (Game,))
     data = cursor.fetchall()
     cursor.close()
     return data
@@ -98,10 +105,17 @@ def getDatasetID(conn, Game):
     cursor.close()
     return data
 
-def getLeaderboard(conn, Game):
-    query = "Select Rank, name, User_ID, score FROM Leaderboard WHERE Dataset_ID = (SELECT Dataset_ID FROM Dataset WHERE Dataset_Name = %s)"
+def getLeaderboard(conn, Game_id):
+    query = "Select Rank, name, User_ID, score FROM Leaderboard WHERE Dataset_ID = %s"
     cursor = conn.cursor()
-    cursor.execute(query, (Game,))
+    cursor.execute(query, (Game_id,))
+    data = cursor.fetchall()
+    cursor.close()
+    return data
+
+def getUsersFromLeaderboard(conn, Game, username):
+    cursor = conn.cursor()
+    cursor.execute("SELECT Rank, name, User_ID, score FROM Leaderboard natural join Users WHERE Dataset_ID = %s AND regexp_count(name,%s) > 0 order by Rank", (Game, username))
     data = cursor.fetchall()
     cursor.close()
     return data

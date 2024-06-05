@@ -28,7 +28,11 @@ GETDATA.create_tables(conn)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("homepage.html", data=GETDATA.getGames(conn))
+    if request.method == "POST":
+        data = GETDATA.searchGames(conn, request.form['Game'])
+    else:
+        data = GETDATA.getGames(conn)
+    return render_template("homepage.html", data=data)
 
 
 @app.route("/<Game>", methods=["GET", "POST"])
@@ -58,5 +62,9 @@ def Game(Game, User_ID=None):
 
 @app.route("/<Game>/Leaderboard", methods=["GET", "POST"])
 def Leaderboard(Game):
-    data = GETDATA.getLeaderboard(conn, Game)
+    Game_id = GETDATA.getDatasetID(conn, Game)
+    if request.method == "POST":
+        data = GETDATA.getUsersFromLeaderboard(conn, Game_id, request.form['Name'])
+    else:
+        data = GETDATA.getLeaderboard(conn, Game_id)
     return render_template("leaderboard.html", data=data, Game=Game)
