@@ -63,7 +63,7 @@ def Game(Game, User_ID=None):
 
 
     if GETDATA.getSCOREprogress(conn, User_ID, Game_id) == None:
-        Country1 = GETDATA.getRandomCountry(conn, Game_id, "None")[0]
+        Country1 = GETDATA.getRandomCountry(conn, Game_id, "Not a Country")[0]
         Country2 = GETDATA.getRandomCountry(conn, Game_id, Country1)[0]
         Score = 0
         GETDATA.insertSCOREprogress(conn, User_ID, Game_id, Score, Country1, Country2)

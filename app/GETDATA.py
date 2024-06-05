@@ -47,7 +47,8 @@ def create_tables(conn):
         cursor.execute(insertDATASET, (i, Games[i]))
 
         # Insert datarows:
-        data = pd.read_csv("app/data/games/" + Games[i] + ".csv")
+        data = pd.read_csv("app/data/games/" + Games[i] + ".csv", dtype={"Country": str, "Value": float}, sep=",")
+
         for j in range(len(data)):
             cursor.execute(selectCountry, (data.iloc[j, 0],))
             if cursor.fetchone() is not None:
@@ -59,7 +60,7 @@ def create_tables(conn):
             cursor.execute(insertHighscore, (j, i, high))
             
             progress = random.randint(0,9)
-            Country1 = getRandomCountry(conn, i, "None")[0]
+            Country1 = getRandomCountry(conn, i, "Not a Country")[0]
             Country2 = getRandomCountry(conn, i, Country1)[0]
             cursor.execute(insertSCOREProgress, (j, i, progress, Country1, Country2))
 
