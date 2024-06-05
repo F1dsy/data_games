@@ -1,3 +1,5 @@
+import webbrowser  
+
 from flask import Flask, render_template, request
 import psycopg2
 
@@ -18,6 +20,7 @@ app.config["SECRET_KEY"] = "fc089b9218301ad987914c53481bff04"
 
 # set your own database
 db = "dbname='flask_project' user='postgres' host='127.0.0.1' password = 'password123'"
+webbrowser.open('http://127.0.0.1:5000/', new=0, autoraise=True)
 
 conn = psycopg2.connect(db)
 conn.autocommit = True
@@ -63,7 +66,7 @@ def Game(Game, User_ID=None):
 def Leaderboard(Game):
     Game_id = GETDATA.getDatasetID(conn, Game)
     if request.method == "POST":
-        data = GETDATA.getUsersFromLeaderboard(conn, Game_id, request.form['Name'])
+        data = GETDATA.getUsersFromLeaderboard(conn, Game_id, request.form['GameName'])
     else:
         data = GETDATA.getLeaderboard(conn, Game_id)
     return render_template("leaderboard.html", data=data, Game=Game)
