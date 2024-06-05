@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import psycopg2
 import webbrowser
-import requests
+
 try:
     import app.GETDATA
 except:
@@ -54,14 +54,14 @@ def index():
 
 @app.route("/<Game>", methods=["GET", "POST"])
 def Game(Game, User_ID=None):
-    if request.method == "POST":
-        
-
-
-
     Game_id = GETDATA.getDatasetID(conn, Game)
     if User_ID == None:
         User_ID = 1
+
+    if request.method == "POST":
+        GETDATA.giveAnswer(conn, User_ID, Game_id, request.form['Answer'])
+
+
     if GETDATA.getSCOREprogress(conn, User_ID, Game_id) == None:
         Country1 = GETDATA.getRandomCountry(conn, Game_id, "None")[0]
         Country2 = GETDATA.getRandomCountry(conn, Game_id, Country1)[0]

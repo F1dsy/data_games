@@ -129,10 +129,30 @@ def updateSCOREprogress(conn, User_ID, Dataset_ID, Score, Country1, Country2):
     cursor.execute("UPDATE ScoreProgress SET Score = %s, Country1 = %s, Country2 = %s WHERE User_ID = %s AND Dataset_ID = %s", (Score, Country1, Country2, User_ID, Dataset_ID))
     cursor.close()
 
+def deleteSCOREprogress(conn, User_ID, Dataset_ID):
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM ScoreProgress WHERE User_ID = %s AND Dataset_ID = %s", (User_ID, Dataset_ID))
+    cursor.close()
+
 def insertSCOREprogress(conn, User_ID, Dataset_ID, Score, Country1, Country2):
     cursor = conn.cursor()
     cursor.execute("INSERT INTO ScoreProgress(User_ID, Dataset_ID, Score, Country1, Country2) VALUES (%s, %s, %s, %s, %s)", (User_ID, Dataset_ID, Score, Country1, Country2))
     cursor.close()
+
+def giveAnswer(conn, User_ID, Dataset_ID, Answer):
+    Score, Country1, Country2 = getSCOREprogress(conn, User_ID, Dataset_ID)
+    Value1, Code1 = getCountryValueAndCode(conn, Dataset_ID, Country1)
+    Value2, Code2 = getCountryValueAndCode(conn, Dataset_ID, Country2)
+
+    if Value1 == Value2 or (Value1 > Value2 and Answer == "Lower") or (Value1 < Value2 and Answer == "Higher"):
+        Score += 1
+        newCountry = getRandomCountry(conn, Dataset_ID, Country2)[0]
+        updateSCOREprogress(conn, User_ID, Dataset_ID, Score, Country2, newCountry)
+    else:
+        deleteSCOREprogress(conn, User_ID, Dataset_ID)
+        Highscore = getHighscore(conn, User_ID, Dataset_ID)[0]
+        if Score > Highscore:
+            updateHighscore(conn, User_ID, Dataset_ID, Score)
 
 def insertUser(conn, name, password):
     cursor = conn.cursor()
