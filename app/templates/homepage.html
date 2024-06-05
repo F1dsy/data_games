@@ -10,12 +10,12 @@
         </form>
     <div class="d-flex flex-column align-items-center">
     {% for category in data %}
-    <a href="/{{category[0]}}"><button class="btn btn-primary">{{ category[0] }}</button></a>
+    <div class="row disp">
+    <a href="/{{category[1]}}"><button class="btn btn-primary">{{ category[0] }}</button></a>
+    <a href="/{{category[1]}}/Leaderboard"><button class="btn btn-info">{{ category[0] }} leaderboard</button></a>
+    </div>
     {% endfor %}
     </div>
-    {% for category in data %}
-    <a href="/{{category[0]}}/Leaderboard"><button class="btn btn-primary">{{ category[0] }} leaderboard</button></a>
-    {% endfor %} 
     </div>
 </section>
 {% endblock content %}

@@ -1,13 +1,16 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "layout.html" %} 
 
+{% block content %}
+<a href="/"><button class="btn btn-primary">back</button></a>
 <div class="container">
-    <h1>{{Game}} Leaderboard</h1>
-    <a href="/"><button class="btn btn-primary">back</button></a>
-    <form method="post" action="/{{Game}}/Leaderboard"> 
+    <h1>{{Game[0]}} Leaderboard</h1>
+    
+    <form method="post" action="/{{Game[1]}}/Leaderboard"> 
         <input type="search" name="GameName" placeholder="Search for Names">
         <button>Search</button>
     </form>
-  <table>
+    <div class="d-flex flex-column align-items-center">
+  <table style="width:20%">
               <tr>
                   <th>Rank</th>
                   <th>Name</th>
@@ -21,6 +24,7 @@
                       {% endfor %}
               </tr>
   </table>
+</div>
 </div>
 
 {% endblock content %}

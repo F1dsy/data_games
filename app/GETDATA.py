@@ -94,7 +94,7 @@ def getGames(conn):
 
 def searchGames(conn, Game):
     cursor = conn.cursor()
-    cursor.execute("SELECT Dataset_Name FROM Dataset where regexp_count(Dataset_Name,%s) > 0 order by Dataset_ID", (Game,))
+    cursor.execute("SELECT Dataset_Name FROM Dataset where regexp_count(Dataset_Name,%s, 1, 'i') > 0 order by Dataset_ID", (Game,))
     data = cursor.fetchall()
     cursor.close()
     return data
@@ -116,7 +116,7 @@ def getLeaderboard(conn, Game_id):
 
 def getUsersFromLeaderboard(conn, Game, username):
     cursor = conn.cursor()
-    cursor.execute("SELECT Rank, name, User_ID, score FROM Leaderboard natural join Users WHERE Dataset_ID = %s AND regexp_count(name,%s) > 0 order by Rank", (Game, username))
+    cursor.execute("SELECT Rank, name, User_ID, score FROM Leaderboard natural join Users WHERE Dataset_ID = %s AND regexp_count(name,%s, 1, 'i') > 0 order by Rank", (Game, username))
     data = cursor.fetchall()
     cursor.close()
     return data

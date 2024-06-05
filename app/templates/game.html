@@ -2,8 +2,8 @@
 
 {% block content %}
 <a href="/"><button class="btn btn-primary">back</button></a>
-<div class="container mt-4">
-    <h1 class="text-center">Guess This: Is the {{ Game }} of {{ Country2 }} higher or lower?</h1>
+<div class="container mt-1">
+    <h1 class="text-center">Guess This: Is the {{ Game[0] }} of {{ Country2 }} Higher or Lower?</h1>
 </div>
 
 <div class="container mt-4">
@@ -13,7 +13,7 @@
                 <img src="/static/png1000px/{{ Code1 }}.png" class="card-img-top" alt="Country 1">
                 <div class="card-body text-center">
                     <h5 class="card-title">{{ Country1 }}</h5>
-                    <p class="card-text">Has a {{ Game }} of {{ Value1 }}</p>
+                    <p class="card-text">Has a {{ Game[0] }} of {{ Value1 }}</p>
                 </div>
             </div>
         </div>
@@ -31,16 +31,18 @@
 </div>
 
 <div class="container mt-4 text-center">
-    <form method="POST" action="/{{ Game }}">
+    <form method="POST" action="/{{ Game[1] }}">
         <button type="submit" name="Answer" value="Higher" class="btn btn-success mx-2">Higher</button>
     </form>
-    <form method="POST" action="/{{ Game }}">
+    <form method="POST" action="/{{ Game[1] }}">
         <button type="submit" name="Answer" value="Lower" class="btn btn-danger mx-2">Lower</button>
     </form>
 </div>
 
 <div class="container mt-4 text-center">
-    <h1>Highscore: {{ Highscore }}</h1>
-    <h1>Score: {{ Score }}</h1>
+  <div class="flex">
+		<h1>Highscore: {{ Highscore }}</h1>
+		<h1>Score: {{ Score }}</h1>
+	</div>
 </div>
 {% endblock content %}
