@@ -1,7 +1,8 @@
 from os import listdir
-import pandas as pd
 import json
 import random
+
+import pandas as pd
 
 random.seed(1337)
 
