@@ -9,6 +9,9 @@
     <a href="/{{category[0]}}"><button class="btn btn-primary">{{ category[0] }}</button></a>
     {% endfor %}
     </div>
+    {% for category in data %}
+    <a href="/{{category[0]}}/Leaderboard"><button class="btn btn-primary">{{ category[0] }} leaderboard</button></a>
+    {% endfor %} 
     </div>
 </section>
 {% endblock content %}
