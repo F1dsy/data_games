@@ -74,16 +74,59 @@ def getRandomCountry(conn, Dataset_id:int, Country_name:str):
     cursor.close()
     return data
 
+def getGames(conn):
+    cursor = conn.cursor()
+    cursor.execute("SELECT Dataset_Name FROM Dataset")
+    data = cursor.fetchall()
+    cursor.close()
+    return data
 
+def getLeaderboard(conn, Game):
+    query = "Select ROW_NUMBER() OVER(ORDER BY score) AS num_row, name, User_ID, score FROM Highscore Natural join Users WHERE Dataset_ID = (SELECT Dataset_ID FROM Dataset WHERE Dataset_Name = %s) ORDER BY Score DESC LIMIT 10"
+    cursor = conn.cursor()
+    cursor.execute(query, (Game,))
+    data = cursor.fetchall()
+    cursor.close()
+    return data
 
-updateUSER = "UPDATE Users SET Username = %s, Password = %s WHERE User_ID = %s"
-updateHighscore = "UPDATE Highscore SET Score = %s WHERE User_ID = %s AND Dataset_ID = %s"
-updateSCOREProgress = "UPDATE ScoreProgress SET Score = %s, Country1 = %s, Country2 = %s WHERE User_ID = %s AND Dataset_ID = %s"
+def getHighscore(conn, User_ID, Dataset_ID):
+    cursor = conn.cursor()
+    cursor.execute("SELECT Score FROM Highscore WHERE User_ID = %s AND Dataset_ID = %s", (User_ID, Dataset_ID))
+    data = cursor.fetchone()
+    cursor.close()
+    return data
 
-deleteUSER = "DELETE FROM Users WHERE User_ID = %s"
+def updateHighscore(conn, User_ID, Dataset_ID, Score):
+    cursor = conn.cursor()
+    cursor.execute("UPDATE Highscore SET Score = %s WHERE User_ID = %s AND Dataset_ID = %s", (Score, User_ID, Dataset_ID))
+    cursor.close()
 
-selectHighscore = "SELECT score FROM Highscore WHERE User_ID = %s AND Dataset_ID = %s"
-selectSCOREprogress = "SELECT score, Country1, Country2 FROM ScoreProgress WHERE User_ID = %s AND Dataset_ID = %s"
-selectTOP10 = "SELECT user_id, name, score FROM Highscore Natural join Users WHERE Dataset_ID = %s ORDER BY Score DESC LIMIT 10"
+def getSCOREprogress(conn, User_ID, Dataset_ID):
+    cursor = conn.cursor()
+    cursor.execute("SELECT Score, Country1, Country2 FROM ScoreProgress WHERE User_ID = %s AND Dataset_ID = %s", (User_ID, Dataset_ID))
+    data = cursor.fetchone()
+    cursor.close()
+    return data
 
+def updateSCOREprogress(conn, User_ID, Dataset_ID, Score, Country1, Country2):
+    cursor = conn.cursor()
+    cursor.execute("UPDATE ScoreProgress SET Score = %s, Country1 = %s, Country2 = %s WHERE User_ID = %s AND Dataset_ID = %s", (Score, Country1, Country2, User_ID, Dataset_ID))
+    cursor.close()
+
+def insertUser(conn, name, password):
+    cursor = conn.cursor()
+    cursor.execute("SELECT MAX(User_ID) FROM Users")
+    User_ID = cursor.fetchone()[0] + 1
+    cursor.execute("INSERT INTO Users(User_ID, name, Password) VALUES (%s, %s, %s)", (User_ID, name, password))
+    cursor.close()
+
+def updateUser(conn, User_ID, name, password):
+    cursor = conn.cursor()
+    cursor.execute("UPDATE Users SET name = %s, Password = %s WHERE User_ID = %s", (name, password, User_ID))
+    cursor.close()
+
+def deleteUser(conn, User_ID):
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM Users WHERE User_ID = %s", (User_ID,))
+    cursor.close()
 

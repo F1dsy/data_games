@@ -5,8 +5,8 @@
     <h2>Select a category to be quizzed on</h2>
     <div class="container-40">
     <div class="d-flex flex-column align-items-center">
-    {% for category in [{"title": "GDP"}, {"title": "Healthcare"}] %}
-        <button class="btn btn-primary">{{ category.title }}</button>
+    {% for category in data %}
+    <a href="/{{category[0]}}"><button class="btn btn-primary">{{ category[0] }}</button></a>
     {% endfor %}
     </div>
     </div>

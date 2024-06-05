@@ -43,10 +43,19 @@ GETDATA.create_tables(conn)
 # app.register_blueprint(Customer)
 # app.register_blueprint(Employee)
   
-webbrowser.open("http://127.0.0.1:5000", new=0, autoraise=True)
+#webbrowser.open("http://127.0.0.1:5000", new=0, autoraise=True)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("homepage.html")
+    return render_template("homepage.html", data=GETDATA.getGames(conn))
 
 
+@app.route("/<Game>", methods=["GET", "POST"])
+def Game(Game):
+    data = GETDATA.getGame(conn, Game)
+    return render_template("game.html", data=data)
+
+@app.route("/<Game>/Leaderboard", methods=["GET", "POST"])
+def Leaderboard(Game):
+    data = GETDATA.getLeaderboard(conn, Game)
+    return render_template("leaderboard.html", data=data)
