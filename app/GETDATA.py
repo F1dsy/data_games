@@ -186,3 +186,6 @@ def deleteUser(conn, User_ID):
     cursor.execute("DELETE FROM Users WHERE User_ID = %s", (User_ID,))
     cursor.close()
 
+def floatToString(inputValue):
+    return (f"{inputValue:,.2f}").rstrip('0').rstrip('.')
+

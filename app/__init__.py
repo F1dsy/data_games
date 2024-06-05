@@ -56,8 +56,8 @@ def Game(Game, User_ID=None):
     Highscore = GETDATA.getHighscore(conn, User_ID, Game_id)[0]
     Value1, Code1 = GETDATA.getCountryValueAndCode(conn, Game_id, Country1)
     Value2, Code2 = GETDATA.getCountryValueAndCode(conn, Game_id, Country2)
-    print(Value1, Code1)
-    
+    Value1 = GETDATA.floatToString(Value1)
+    Value2 = GETDATA.floatToString(Value2)
     return render_template("game.html", Country1=Country1, Country2=Country2, Value1=Value1, Value2=Value2, Code1=Code1, Code2=Code2, Score=Score, Highscore=Highscore, Game=Game)
 
 @app.route("/<Game>/Leaderboard", methods=["GET", "POST"])
