@@ -99,7 +99,7 @@ def getDatasetID(conn, Game):
     return data
 
 def getLeaderboard(conn, Game):
-    query = "Select ROW_NUMBER() OVER(ORDER BY Score DESC) AS num_row, name, User_ID, score FROM Highscore Natural join Users WHERE Dataset_ID = (SELECT Dataset_ID FROM Dataset WHERE Dataset_Name = %s) ORDER BY Score DESC LIMIT 10"
+    query = "Select Rank, name, User_ID, score FROM Leaderboard WHERE Dataset_ID = (SELECT Dataset_ID FROM Dataset WHERE Dataset_Name = %s)"
     cursor = conn.cursor()
     cursor.execute(query, (Game,))
     data = cursor.fetchall()

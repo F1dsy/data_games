@@ -39,6 +39,13 @@ CREATE TABLE IF NOT EXISTS Highscore(
 	PRIMARY KEY (User_ID, Dataset_ID)
 );
 
+DROP VIEW IF EXISTS Leaderboard CASCADE;
+CREATE VIEW Leaderboard AS
+Select Dataset_ID, ROW_NUMBER() OVER(PARTITION BY Dataset_ID ORDER BY Score DESC) AS Rank, name, User_ID, score 
+FROM Highscore 
+Natural join Users 
+ORDER BY Score DESC;
+
 DROP TABLE IF EXISTS ScoreProgress CASCADE;
 CREATE TABLE IF NOT EXISTS ScoreProgress(
 	User_ID integer,
