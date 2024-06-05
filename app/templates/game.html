@@ -1,12 +1,26 @@
 {% extends "layout.html" %} {% block content %}
-<h1>Guess This</h1>
+<h1>Guess This: Is the {{Game}} of {{Country2}} higher or lower?</h1>
 
 
-
+<div class="container">
+  <img src="/static/png1000px/{{Code1}}.png" alt="Snow" style="width:50%;">
+  <div class="centered">{{Country1}}<br>has a {{Game}} of<br>{{Value1}}</div>
+</div>
 
 <div class="d-flex flex-column align-items-center">
   <button class="btn btn-success">Higher</button>
   <button class="btn btn-danger">Lower</button>
 </div>
+
+
+<div class="container">
+  <img src="/static/png1000px/{{Code2}}.png" alt="Snow" style="width:50%;">
+  <div class="centered">{{Country2}}<br>has <br>{{Game}} than {{Country1}}</div>
+</div>
+
+
+<h1>Highscore: {{Highscore}}</h1>
+<h1>Score: {{Score}}</h1>
+
 
 {% endblock content %}

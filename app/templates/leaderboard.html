@@ -1,0 +1,21 @@
+{% extends "layout.html" %} {% block content %}
+
+<div class="container">
+    <h1>{{Game}} Leaderboard</h1>
+  <table>
+              <tr>
+                  <th>Rank</th>
+                  <th>Name</th>
+                  <th>Score</th>
+              </tr>
+                  {% for row0 in data %}
+              <tr>
+                  <td>{{ row0[0] }}</td>
+                  <td>{{ row0[1] }}#{{ row0[2] }}</td>
+                  <td>{{ row0[3] }}</td>
+                      {% endfor %}
+              </tr>
+  </table>
+</div>
+
+{% endblock content %}

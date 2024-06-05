@@ -59,7 +59,7 @@ def create_tables(conn):
             cursor.execute(insertHighscore, (j, i, high))
             
             progress = random.randint(0,9)
-            Country1 = getRandomCountry(conn, i, "NOT A COUNTRY")[0]
+            Country1 = getRandomCountry(conn, i, "None")[0]
             Country2 = getRandomCountry(conn, i, Country1)[0]
             cursor.execute(insertSCOREProgress, (j, i, progress, Country1, Country2))
 
@@ -69,10 +69,19 @@ def create_tables(conn):
 def getRandomCountry(conn, Dataset_id:int, Country_name:str):
     #get random row from schema.sql
     cursor = conn.cursor()
-    cursor.execute("SELECT Country, Value FROM Datarow WHERE Dataset_ID = %s AND Country != %s ORDER BY RANDOM() LIMIT 1;", (Dataset_id, Country_name))
+    cursor.execute("SELECT Country FROM Datarow WHERE Dataset_ID = %s AND Country != %s ORDER BY RANDOM() LIMIT 1;", (Dataset_id, Country_name))
     data = cursor.fetchone()
     cursor.close()
     return data
+
+def getCountryValueAndCode(conn, Dataset_id:int, Country_name:str):
+    cursor = conn.cursor()
+    cursor.execute("SELECT Value FROM Datarow WHERE Dataset_ID = %s AND Country = %s", (Dataset_id, Country_name))
+    value = cursor.fetchone()[0]
+    cursor.execute("SELECT Code FROM Countries WHERE Country = %s", (Country_name,))
+    code = cursor.fetchone()[0]
+    cursor.close()
+    return value, code.lower()
 
 def getGames(conn):
     cursor = conn.cursor()
@@ -81,8 +90,15 @@ def getGames(conn):
     cursor.close()
     return data
 
+def getDatasetID(conn, Game):
+    cursor = conn.cursor()
+    cursor.execute("SELECT Dataset_ID FROM Dataset WHERE Dataset_Name = %s", (Game,))
+    data = cursor.fetchone()[0]
+    cursor.close()
+    return data
+
 def getLeaderboard(conn, Game):
-    query = "Select ROW_NUMBER() OVER(ORDER BY score) AS num_row, name, User_ID, score FROM Highscore Natural join Users WHERE Dataset_ID = (SELECT Dataset_ID FROM Dataset WHERE Dataset_Name = %s) ORDER BY Score DESC LIMIT 10"
+    query = "Select ROW_NUMBER() OVER(ORDER BY Score DESC) AS num_row, name, User_ID, score FROM Highscore Natural join Users WHERE Dataset_ID = (SELECT Dataset_ID FROM Dataset WHERE Dataset_Name = %s) ORDER BY Score DESC LIMIT 10"
     cursor = conn.cursor()
     cursor.execute(query, (Game,))
     data = cursor.fetchall()
@@ -111,6 +127,11 @@ def getSCOREprogress(conn, User_ID, Dataset_ID):
 def updateSCOREprogress(conn, User_ID, Dataset_ID, Score, Country1, Country2):
     cursor = conn.cursor()
     cursor.execute("UPDATE ScoreProgress SET Score = %s, Country1 = %s, Country2 = %s WHERE User_ID = %s AND Dataset_ID = %s", (Score, Country1, Country2, User_ID, Dataset_ID))
+    cursor.close()
+
+def insertSCOREprogress(conn, User_ID, Dataset_ID, Score, Country1, Country2):
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO ScoreProgress(User_ID, Dataset_ID, Score, Country1, Country2) VALUES (%s, %s, %s, %s, %s)", (User_ID, Dataset_ID, Score, Country1, Country2))
     cursor.close()
 
 def insertUser(conn, name, password):

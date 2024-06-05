@@ -1,10 +1,12 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import psycopg2
+import webbrowser
+import requests
 try:
     import app.GETDATA
 except:
     import GETDATA
-import webbrowser
+
 
 # from flask_bcrypt import Bcrypt
 # from flask_login import LoginManager
@@ -51,11 +53,31 @@ def index():
 
 
 @app.route("/<Game>", methods=["GET", "POST"])
-def Game(Game):
-    data = GETDATA.getGame(conn, Game)
-    return render_template("game.html", data=data)
+def Game(Game, User_ID=None):
+    if request.method == "POST":
+        
+
+
+
+    Game_id = GETDATA.getDatasetID(conn, Game)
+    if User_ID == None:
+        User_ID = 1
+    if GETDATA.getSCOREprogress(conn, User_ID, Game_id) == None:
+        Country1 = GETDATA.getRandomCountry(conn, Game_id, "None")[0]
+        Country2 = GETDATA.getRandomCountry(conn, Game_id, Country1)[0]
+        Score = 0
+        GETDATA.insertSCOREprogress(conn, User_ID, Game_id, Score, Country1, Country2)
+    else:
+        Score, Country1, Country2 = GETDATA.getSCOREprogress(conn, User_ID, Game_id)
+
+    Highscore = GETDATA.getHighscore(conn, User_ID, Game_id)[0]
+    Value1, Code1 = GETDATA.getCountryValueAndCode(conn, Game_id, Country1)
+    Value2, Code2 = GETDATA.getCountryValueAndCode(conn, Game_id, Country2)
+    print(Value1, Code1)
+    
+    return render_template("game.html", Country1=Country1, Country2=Country2, Value1=Value1, Value2=Value2, Code1=Code1, Code2=Code2, Score=Score, Highscore=Highscore, Game=Game)
 
 @app.route("/<Game>/Leaderboard", methods=["GET", "POST"])
 def Leaderboard(Game):
     data = GETDATA.getLeaderboard(conn, Game)
-    return render_template("leaderboard.html", data=data)
+    return render_template("leaderboard.html", data=data, Game=Game)
