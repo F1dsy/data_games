@@ -1,6 +1,7 @@
 from os import listdir
 import json
 import random
+import re
 
 import pandas as pd
 
@@ -33,8 +34,9 @@ def create_tables(conn):
     # Insert datasets:
     Games = []
     filenames = listdir("app/data/games")
+    pattern = re.compile(r"^[a-zA-Z0-9_]*.csv$")
     for name in filenames:
-        if name.endswith(".csv"):
+        if pattern.match(name) is not None:
             Games.append(name[:-4])
 
     insertDATASET = "INSERT INTO Dataset(Dataset_ID, Dataset_Name) VALUES (%s, %s)"
