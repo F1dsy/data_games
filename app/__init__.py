@@ -10,21 +10,23 @@ except:
     import GETDATA
 
 
-# from flask_bcrypt import Bcrypt
-# from flask_login import LoginManager
-# from flask import session
-# from flask_session import Session
+# FILL IN:
+DBusername = 'postgres'
+DBpassword = 'password123'
+DBname = 'postgres'
+DBhost = '127.0.0.1'
+
 
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "fc089b9218301ad987914c53481bff04"
 
 # set your own database
-db = "dbname='flask_project' user='postgres' host='127.0.0.1' password = 'password123'"
+db = f"dbname='{DBname}' user='{DBusername}' host='{DBhost}' password = '{DBpassword}'"
 conn = psycopg2.connect(db)
 conn.autocommit = True
 GETDATA.create_tables(conn)
-webbrowser.open('http://127.0.0.1:5000/', new=0)
+webbrowser.open(f"http://{DBhost}:5000/", new=0)
 
 
 @app.route("/", methods=["GET", "POST"])
