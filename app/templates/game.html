@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<a href="/"><button class="btn btn-primary">back</button></a>
+<div class="top-left"><a href="/"><button class="btn btn-primary">back</button></a></div>
 <div class="container mt-1">
     <h1 class="text-center">Guess This: Is the {{ Game[0] }} of {{ Country2 }} Higher or Lower?</h1>
 </div>
@@ -37,12 +37,8 @@
     <form method="POST" action="/{{ Game[1] }}">
         <button type="submit" name="Answer" value="Lower" class="btn btn-danger mx-2">Lower</button>
     </form>
+    <div class="bottom-left"><h1>Highscore: {{ Highscore }}</h1></div>
+<div class="bottom-right"><h1>Score: {{ Score }}</h1></div>
 </div>
 
-<div class="container mt-4 text-center">
-  <div class="flex">
-		<h1>Highscore: {{ Highscore }}</h1>
-		<h1>Score: {{ Score }}</h1>
-	</div>
-</div>
 {% endblock content %}

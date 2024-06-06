@@ -44,7 +44,7 @@ def Game(Game, User_ID=None):
     Game = (re.sub('_', ' ', Game),Game)
 
     if User_ID == None:
-        User_ID = 1
+        User_ID = 0
 
     if request.method == "POST":
         GETDATA.giveAnswer(conn, User_ID, Game_id, request.form['Answer'])

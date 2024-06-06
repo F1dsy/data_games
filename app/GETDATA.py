@@ -24,7 +24,7 @@ def create_tables(conn):
 
     # Insert test users:
     insertUSER = "INSERT INTO Users(User_ID, name, Password) VALUES (%s, %s, %s)"
-    testusersandpassword = [("Jonas", "1234"), ("Kasper", "asdasd"), ("Mads", "dwew"), ("Mikkel", "1234"), ("Andreas", "1234"),
+    testusersandpassword = [("You", "1234"), ("Kasper", "asdasd"), ("Mads", "dwew"), ("Mikkel", "1234"), ("Andreas", "1234"),
                             ("Morten", "876"), ("Mathias", "44343dsa"), ("Jens", "1234"), ("Jesper", "1234"), ("Lars", "1234")]
 
     for i in range(len(testusersandpassword)):
@@ -56,8 +56,9 @@ def create_tables(conn):
                 cursor.execute(insertDATAROW, (i, data.iloc[j, 0], data.iloc[j, 1]))
         
         # Insert highscore and scoreprogress for test users:
-        for j in range(len(testusersandpassword)):
-            high = random.randint(0,9)
+        cursor.execute(insertHighscore, (0, i, 0))
+        for j in range(1,len(testusersandpassword)):
+            high = random.randint(0,20)
             cursor.execute(insertHighscore, (j, i, high))
             
             progress = random.randint(0,9)
